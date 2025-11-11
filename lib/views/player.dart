@@ -7,6 +7,7 @@ import '../blocs/player_load_states.dart';
 import '../blocs/player_state.dart';
 import '../blocs/playerbloc.dart';
 import '../models/audio_item.dart';
+import 'audio_settings_sheet.dart';
 
 class Player extends StatefulWidget {
   final AudioPlayer audioPlayer;
@@ -22,21 +23,19 @@ class _PlayerState extends State<Player> {
   PageController? pageController;
   int _lastIndex = 0;
   final List<AudioItem> canciones = [
-      AudioItem(
-        "allthat.mp3",
-        "All that",
-        "Mayelo",
-        "assets/allthat_colored.jpg",
-      ),
-      AudioItem("love.mp3",
-          "Love", "Diego",
-          "assets/love_colored.jpg"),
-      AudioItem(
-        "thejazzpiano.mp3",
-        "Jazz Piano",
-        "Jazira",
-        "assets/thejazzpiano_colored.jpg",
-      ),
+    AudioItem(
+      "allthat.mp3",
+      "All that",
+      "Mayelo",
+      "assets/allthat_colored.jpg",
+    ),
+    AudioItem("love.mp3", "Love", "Diego", "assets/love_colored.jpg"),
+    AudioItem(
+      "thejazzpiano.mp3",
+      "Jazz Piano",
+      "Jazira",
+      "assets/thejazzpiano_colored.jpg",
+    ),
   ];
   late final PlayerBloc bloc = PlayerBloc(
     audioPlayer: widget.audioPlayer,
@@ -62,7 +61,7 @@ class _PlayerState extends State<Player> {
           if (state is PlayingState) {
             if (state.currentIndex != _lastIndex) {
               _lastIndex = state.currentIndex;
-              if (pageController != null && 
+              if (pageController != null &&
                   pageController!.hasClients &&
                   (pageController!.page?.round() ?? -1) != state.currentIndex) {
                 pageController!.animateToPage(
@@ -75,7 +74,23 @@ class _PlayerState extends State<Player> {
           }
         },
         child: Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            toolbarHeight: 56,
+            backgroundColor: Color(0xff3966da),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => const AudioSettingsSheet(),
+                  );
+                },
+              ),
+            ],
+          ),
           body: SafeArea(
             child: Column(
               children: <Widget>[

@@ -29,7 +29,7 @@ class Swiper extends StatelessWidget {
           children: <Widget>[
             SizedBox(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height *.3,
+              height: MediaQuery.of(context).size.height * .20,
               child: PageView.builder(
                 controller: pageController,
                 itemCount: audioList.length,
@@ -104,20 +104,14 @@ class Swiper extends StatelessWidget {
         SizedBox(height: 8),
         Text(
           audioItem.artist,
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.white70,
-          ),
+          style: TextStyle(fontSize: 18, color: Colors.white70),
         ),
       ],
     );
   }
 
   Widget _buildPlayerControls(BuildContext context, PlayingState state) {
-    return _PlayerControlsWidget(
-      state: state,
-      bloc: bloc,
-    );
+    return _PlayerControlsWidget(state: state, bloc: bloc);
   }
 }
 
@@ -167,9 +161,9 @@ class _PlayerControlsWidgetState extends State<_PlayerControlsWidget> {
         final position = _isDragging && _dragValue != null
             ? Duration(milliseconds: _dragValue!.toInt())
             : state.position;
-        
+
         final isPlaying = state.playing;
-    
+
         // Formatear tiempo
         String formatDuration(Duration duration) {
           String twoDigits(int n) => n.toString().padLeft(2, '0');
@@ -180,17 +174,17 @@ class _PlayerControlsWidgetState extends State<_PlayerControlsWidget> {
 
         // Calcular el valor del slider
         // Si la duración es 0 o muy pequeña, usar un valor por defecto temporal
-        final maxDuration = duration.inMilliseconds > 0 
-            ? duration.inMilliseconds.toDouble() 
-            : (position.inMilliseconds > 0 
-                ? position.inMilliseconds * 2.0 
-                : 100.0); // Valor temporal hasta que se obtenga la duración real
-        
+        final maxDuration = duration.inMilliseconds > 0
+            ? duration.inMilliseconds.toDouble()
+            : (position.inMilliseconds > 0
+                  ? position.inMilliseconds * 2.0
+                  : 100.0); // Valor temporal hasta que se obtenga la duración real
+
         final currentValue = _isDragging && _dragValue != null
             ? _dragValue!.clamp(0.0, maxDuration)
-            : (maxDuration > 0 
-                ? position.inMilliseconds.toDouble().clamp(0.0, maxDuration)
-                : 0.0);
+            : (maxDuration > 0
+                  ? position.inMilliseconds.toDouble().clamp(0.0, maxDuration)
+                  : 0.0);
 
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
@@ -202,7 +196,7 @@ class _PlayerControlsWidgetState extends State<_PlayerControlsWidget> {
                   activeTrackColor: Colors.white,
                   inactiveTrackColor: Colors.white38,
                   thumbColor: Colors.white,
-                  overlayColor: Colors.white.withOpacity(0.2),
+                  overlayColor: Colors.white.withValues(alpha: 0.2),
                   thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8),
                 ),
                 child: Slider(
@@ -221,7 +215,9 @@ class _PlayerControlsWidgetState extends State<_PlayerControlsWidget> {
                       _isDragging = false;
                       _dragValue = null;
                     });
-                    widget.bloc.add(SeekEvent(Duration(milliseconds: value.toInt())));
+                    widget.bloc.add(
+                      SeekEvent(Duration(milliseconds: value.toInt())),
+                    );
                   },
                 ),
               ),
@@ -233,17 +229,11 @@ class _PlayerControlsWidgetState extends State<_PlayerControlsWidget> {
                   children: [
                     Text(
                       formatDuration(position),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
+                      style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
                     Text(
                       formatDuration(duration),
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 12,
-                      ),
+                      style: TextStyle(color: Colors.white70, fontSize: 12),
                     ),
                   ],
                 ),
@@ -259,11 +249,12 @@ class _PlayerControlsWidgetState extends State<_PlayerControlsWidget> {
                     height: 200,
                     child: CircularProgressIndicator(
                       value: duration.inMilliseconds > 0
-                          ? (position.inMilliseconds / duration.inMilliseconds).clamp(0.0, 1.0)
+                          ? (position.inMilliseconds / duration.inMilliseconds)
+                                .clamp(0.0, 1.0)
                           : 0.0,
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       strokeWidth: 3.0,
-                      backgroundColor: Colors.white.withOpacity(0.2),
+                      backgroundColor: Colors.white.withValues(alpha: 0.2),
                     ),
                   ),
                   // Botones de control
@@ -275,14 +266,18 @@ class _PlayerControlsWidgetState extends State<_PlayerControlsWidget> {
                         onPressed: () {
                           widget.bloc.add(PrevEvent());
                         },
-                        icon: Icon(Icons.skip_previous, color: Colors.white, size: 32),
+                        icon: Icon(
+                          Icons.skip_previous,
+                          color: Colors.white,
+                          size: 32,
+                        ),
                       ),
                       SizedBox(width: 20),
                       // Botón play/pause
                       Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                         ),
                         child: IconButton(
                           onPressed: () {
@@ -302,7 +297,11 @@ class _PlayerControlsWidgetState extends State<_PlayerControlsWidget> {
                         onPressed: () {
                           widget.bloc.add(NextEvent());
                         },
-                        icon: Icon(Icons.skip_next, color: Colors.white, size: 32),
+                        icon: Icon(
+                          Icons.skip_next,
+                          color: Colors.white,
+                          size: 32,
+                        ),
                       ),
                     ],
                   ),
