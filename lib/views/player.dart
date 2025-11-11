@@ -29,7 +29,10 @@ class _PlayerState extends State<Player> {
       "Mayelo",
       "assets/allthat_colored.jpg",
     ),
-    AudioItem("love.mp3", "Love", "Diego", "assets/love_colored.jpg"),
+    AudioItem("love.mp3",
+        "Love",
+        "Diego",
+        "assets/love_colored.jpg"),
     AudioItem(
       "thejazzpiano.mp3",
       "Jazz Piano",
@@ -79,7 +82,7 @@ class _PlayerState extends State<Player> {
             backgroundColor: Color(0xff3966da),
             actions: [
               IconButton(
-                icon: const Icon(Icons.settings),
+                icon: const Icon(Icons.settings_outlined),
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,
