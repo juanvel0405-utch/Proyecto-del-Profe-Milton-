@@ -147,7 +147,7 @@ class AudioSettingsSheet extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Información del Audio', style: titleStyle.copyWith(fontSize: 16)),
+                        Text('Información del Audio', style: titleStyle.copyWith(fontSize: 14)),
                         const SizedBox(height: 12),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

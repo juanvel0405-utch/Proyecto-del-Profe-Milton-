@@ -42,6 +42,54 @@ class _PlayerState extends State<Player> {
       "Jazira",
       "assets/thejazzpiano_colored.jpg",
     ),
+    AudioItem(
+      "CompaBladi.mp3",
+      "Compa Bladi",
+      "Natanael Cano",
+      "assets/compabladi.jpeg",
+    ),
+    AudioItem(
+      "Dijeron.mp3",
+      "No la iba a lograr",
+      "Chino Pacas",
+      "assets/dijieron.jpg",
+    ),
+    AudioItem(
+      "ElGordoTraeElMando.mp3",
+      "El gordo trae el mando",
+      "Chino Pacas",
+      "assets/elgordotraeelmando.jpeg",
+    ),
+    AudioItem(
+      "LosLujosDelR.mp3",
+      "Los lujos del R",
+      "Arturo Olivas",
+      "assets/loslujosdelr.jpg",
+    ),
+    AudioItem(
+      "MiGustoMiDinero.mp3",
+      "Mi gusto mi dinero",
+      "Nivel Codiciado",
+      "assets/migustomidinero.jpg",
+    ),
+    AudioItem(
+      "Militar.mp3",
+      "Militar",
+      "El de las R's",
+      "assets/militar.jpeg",
+    ),
+    AudioItem(
+      "NothingElseMatters.mp3",
+      "Nothing Else Matters",
+      "Metallica",
+      "assets/nothingelsematters.jpg",
+    ),
+    AudioItem(
+      "ThePrice.mp3",
+      "The Price",
+      "Leprous",
+      "assets/theprice.jpg",
+    ),
   ];
   late final PlayerBloc bloc = PlayerBloc(
     audioPlayer: widget.audioPlayer,

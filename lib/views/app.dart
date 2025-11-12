@@ -8,7 +8,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "playBloc",
+      title: "Reproductor",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
