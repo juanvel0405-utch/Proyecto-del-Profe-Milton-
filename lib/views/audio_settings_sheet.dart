@@ -1,4 +1,3 @@
-//punto 4 settinds
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:proyectou3/blocs/player_load_event.dart';

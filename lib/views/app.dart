@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'splash.dart'; //splash screen
+import 'splash.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class App extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xff3966da),
         appBarTheme: AppBarTheme(backgroundColor: const Color(0xff28a0e5)),
       ),
-      home: const SplashScreen(), //splash screen
+      home: const SplashScreen(),
     );
   }
 }

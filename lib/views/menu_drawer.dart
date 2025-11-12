@@ -32,7 +32,6 @@ class MenuDrawer extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
-                // Imagen del header
                 Container(
                   width: double.infinity,
                   height: 200,
@@ -48,7 +47,6 @@ class MenuDrawer extends StatelessWidget {
                   ),
                   child: Stack(
                     children: [
-                      // Imagen de fondo
                       Positioned.fill(
                         child: Image.asset(
                           'assets/iconoapp.png',
@@ -56,7 +54,6 @@ class MenuDrawer extends StatelessWidget {
                           opacity: const AlwaysStoppedAnimation(0.3),
                         ),
                       ),
-                      // Contenido sobre la imagen
                       Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -105,7 +102,6 @@ class MenuDrawer extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Lista de canciones
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -165,18 +161,15 @@ class MenuDrawer extends StatelessWidget {
                         selected: isSelected,
                         selectedTileColor: const Color(0xFF2A2F3D).withOpacity(0.5),
                         onTap: () {
-                          // Cerrar el drawer
                           if (onCloseDrawer != null) {
                             onCloseDrawer!();
                           }
-                          // Cargar la canción seleccionada
                           context.read<PlayerBloc>().add(PlayerLoadEvent(index));
                         },
                       );
                     },
                   ),
                 ),
-                // Footer con información y botón de settings
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   decoration: BoxDecoration(
@@ -208,7 +201,6 @@ class MenuDrawer extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // Botón de configuración
                       IconButton(
                         icon: const Icon(
                           Icons.settings_outlined,
@@ -216,15 +208,12 @@ class MenuDrawer extends StatelessWidget {
                           size: 24,
                         ),
                         onPressed: () {
-                          // Capturar el BLoC antes de cerrar el drawer
                           final bloc = context.read<PlayerBloc>();
                           
-                          // Cerrar el drawer primero
                           if (onCloseDrawer != null) {
                             onCloseDrawer!();
                           }
                           
-                          // Abrir settings después de un pequeño delay
                           Future.delayed(const Duration(milliseconds: 300), () {
                             showModalBottomSheet(
                               context: context,
@@ -242,7 +231,6 @@ class MenuDrawer extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Controles de reproducción
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                   decoration: BoxDecoration(
@@ -257,7 +245,6 @@ class MenuDrawer extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      // Botón anterior
                       IconButton(
                         icon: const Icon(
                           Icons.skip_previous,
@@ -268,7 +255,6 @@ class MenuDrawer extends StatelessWidget {
                           context.read<PlayerBloc>().add(PrevEvent());
                         },
                       ),
-                      // Botón play/pause
                       Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -294,7 +280,6 @@ class MenuDrawer extends StatelessWidget {
                           },
                         ),
                       ),
-                      // Botón siguiente
                       IconButton(
                         icon: const Icon(
                           Icons.skip_next,

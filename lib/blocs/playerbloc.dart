@@ -57,7 +57,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayState> {
       ));
     }
   }
-// Funcionalidades de settings PUNTO 4
+
   FutureOr<void> _setVolume(SetVolumeEvent event, Emitter<PlayState> emit) async {
     if (state is PlayingState) {
       try {

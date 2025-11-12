@@ -8,7 +8,6 @@ abstract class PlayerEvent extends Equatable {
   List<dynamic> get props => [];
 }
 
-// Eventos internos para actualizar posición y duración
 class UpdatePositionEvent extends PlayerEvent {
   final Duration position;
   const UpdatePositionEvent(this.position);

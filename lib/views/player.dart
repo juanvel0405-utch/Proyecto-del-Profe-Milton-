@@ -63,23 +63,18 @@ class _PlayerState extends State<Player> {
       value: bloc,
       child: BlocListener<PlayerBloc, PlayState>(
         listener: (context, state) {
-          // Sincronizar PageController cuando cambia el índice
           if (state is PlayingState) {
             final currentPageIndex = pageController?.page?.round() ?? -1;
             
-            // Solo animar si el índice cambió Y el PageController no está ya en esa página
             if (state.currentIndex != _lastIndex || currentPageIndex != state.currentIndex) {
               _lastIndex = state.currentIndex;
               
               if (pageController != null && pageController!.hasClients) {
-                // Usar jumpToPage para cambios grandes, animateToPage para cambios pequeños
                 final difference = (state.currentIndex - currentPageIndex).abs();
                 
                 if (difference > 1 || currentPageIndex == -1) {
-                  // Salto directo para cambios grandes o inicial
                   pageController!.jumpToPage(state.currentIndex);
                 } else {
-                  // Animación para cambios de una página
                   pageController!.animateToPage(
                     state.currentIndex,
                     duration: Duration(milliseconds: 300),

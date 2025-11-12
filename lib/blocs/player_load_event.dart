@@ -34,7 +34,7 @@ class SeekEvent extends PlayerEvent{
   const SeekEvent(this.position);
   List<Object> get props => [position];
 }
-// Funcionalidades de settings PUNTO 4
+
 class SetVolumeEvent extends PlayerEvent {
   final double volume;
   const SetVolumeEvent(this.volume);
@@ -42,7 +42,6 @@ class SetVolumeEvent extends PlayerEvent {
   List<Object> get props => [volume];
 }
 
-// Funcionalidades de settings PUNTO 4
 class SetPlaybackRateEvent extends PlayerEvent {
   final double rate;
   const SetPlaybackRateEvent(this.rate);

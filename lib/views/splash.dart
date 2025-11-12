@@ -1,4 +1,3 @@
-//splash screen
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:proyectou3/views/home.dart';
@@ -20,7 +19,6 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     
-    // Configurar animaciones
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
@@ -44,7 +42,6 @@ class _SplashScreenState extends State<SplashScreen>
 
     _animationController.forward();
 
-    // Timer para navegar después de 3 segundos
     Timer(const Duration(seconds: 3), () {
       if (mounted) {
         Navigator.of(context).pushReplacement(
@@ -72,7 +69,6 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Logo o ícono de la aplicación
                 Container(
                   width: 150,
                   height: 150,
@@ -98,9 +94,8 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 30),
-                // Título de la aplicación
                 const Text(
-                  'Proyecto U3',
+                  'Reproductor de Audio',
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -110,14 +105,13 @@ class _SplashScreenState extends State<SplashScreen>
                 ),
                 const SizedBox(height: 10),
                 const Text(
-                  'Reproductor de Audio',
+                  'Proyecto U3',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white70,
                   ),
                 ),
                 const SizedBox(height: 50),
-                // Indicador de carga
                 const CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
