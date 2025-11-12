@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:proyectou3/views/swiper.dart';
 import '../blocs/player_load_event.dart';
 import '../blocs/player_load_states.dart';
@@ -8,6 +9,7 @@ import '../blocs/player_state.dart';
 import '../blocs/playerbloc.dart';
 import '../models/audio_item.dart';
 import 'audio_settings_sheet.dart';
+import 'menu_drawer.dart';
 
 class Player extends StatefulWidget {
   final AudioPlayer audioPlayer;
@@ -22,6 +24,7 @@ class _PlayerState extends State<Player> {
   Color? wormColor;
   PageController? pageController;
   int _lastIndex = 0;
+  final GlobalKey<SliderDrawerState> sliderDrawerKey = GlobalKey<SliderDrawerState>();
   final List<AudioItem> canciones = [
     AudioItem(
       "allthat.mp3",
@@ -60,50 +63,99 @@ class _PlayerState extends State<Player> {
       value: bloc,
       child: BlocListener<PlayerBloc, PlayState>(
         listener: (context, state) {
-          // Sincronizar PageController cuando cambia el índice desde los botones
+          // Sincronizar PageController cuando cambia el índice
           if (state is PlayingState) {
-            if (state.currentIndex != _lastIndex) {
+            final currentPageIndex = pageController?.page?.round() ?? -1;
+            
+            // Solo animar si el índice cambió Y el PageController no está ya en esa página
+            if (state.currentIndex != _lastIndex || currentPageIndex != state.currentIndex) {
               _lastIndex = state.currentIndex;
-              if (pageController != null &&
-                  pageController!.hasClients &&
-                  (pageController!.page?.round() ?? -1) != state.currentIndex) {
-                pageController!.animateToPage(
-                  state.currentIndex,
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
+              
+              if (pageController != null && pageController!.hasClients) {
+                // Usar jumpToPage para cambios grandes, animateToPage para cambios pequeños
+                final difference = (state.currentIndex - currentPageIndex).abs();
+                
+                if (difference > 1 || currentPageIndex == -1) {
+                  // Salto directo para cambios grandes o inicial
+                  pageController!.jumpToPage(state.currentIndex);
+                } else {
+                  // Animación para cambios de una página
+                  pageController!.animateToPage(
+                    state.currentIndex,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }
               }
             }
           }
         },
-        child: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 56,
-            backgroundColor: Color(0xff3966da),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.settings_outlined),
+        child: SliderDrawer(
+          key: sliderDrawerKey,
+          appBar: SliderAppBar(
+            appBarHeight: 0,
+            appBarColor: Colors.transparent,
+          ),
+          slider: MenuDrawer(
+            canciones: canciones,
+            sliderMenuKey: sliderDrawerKey,
+            onCloseDrawer: () {
+              sliderDrawerKey.currentState?.closeSlider();
+            },
+          ),
+          child: Scaffold(
+            appBar: AppBar(
+              toolbarHeight: 56,
+              backgroundColor: const Color(0xff3966da),
+              title: const Text(
+                'Reproductor',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              leading: IconButton(
+                icon: const Icon(Icons.menu),
                 onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) => const AudioSettingsSheet(),
-                  );
+                  final drawerState = sliderDrawerKey.currentState;
+                  if (drawerState != null) {
+                    if (drawerState.isDrawerOpen) {
+                      drawerState.closeSlider();
+                    } else {
+                      drawerState.openSlider();
+                    }
+                  }
                 },
               ),
-            ],
-          ),
-          body: SafeArea(
-            child: Column(
-              children: <Widget>[
-                Swiper(
-                  pageController: pageController!,
-                  audioList: canciones,
-                  color: wormColor!,
-                  bloc: bloc,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.settings_outlined),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => BlocProvider.value(
+                        value: bloc,
+                        child: const AudioSettingsSheet(),
+                      ),
+                    );
+                  },
                 ),
               ],
+            ),
+            body: SafeArea(
+              child: Column(
+                children: <Widget>[
+                  Swiper(
+                    pageController: pageController!,
+                    audioList: canciones,
+                    color: wormColor!,
+                    bloc: bloc,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

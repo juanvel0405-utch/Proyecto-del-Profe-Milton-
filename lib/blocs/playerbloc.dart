@@ -23,6 +23,8 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayState> {
     on<NextEvent>(siguiente);
     on<PrevEvent>(anterior);
     on<SeekEvent>(buscar);
+    on<SetVolumeEvent>(_setVolume);
+    on<SetPlaybackRateEvent>(_setPlaybackRate);
     on<UpdatePositionEvent>(_updatePosition);
     on<UpdateDurationEvent>(_updateDuration);
     setUp();
@@ -36,6 +38,8 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayState> {
         duration: estadoActual.duration,
         position: event.position,
         playing: estadoActual.playing,
+        volume: estadoActual.volume,
+        playbackRate: estadoActual.playbackRate,
       ));
     }
   }
@@ -48,7 +52,35 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayState> {
         duration: event.duration,
         position: estadoActual.position,
         playing: estadoActual.playing,
+        volume: estadoActual.volume,
+        playbackRate: estadoActual.playbackRate,
       ));
+    }
+  }
+// Funcionalidades de settings PUNTO 4
+  FutureOr<void> _setVolume(SetVolumeEvent event, Emitter<PlayState> emit) async {
+    if (state is PlayingState) {
+      try {
+        await audioPlayer.setVolume(event.volume);
+        final estadoActual = state as PlayingState;
+        emit(estadoActual.copyWith(volume: event.volume));
+      } catch (e) {
+        emit(ErrorState("Error: no se pudo cambiar el volumen"));
+        debugPrint(e.toString());
+      }
+    }
+  }
+
+  FutureOr<void> _setPlaybackRate(SetPlaybackRateEvent event, Emitter<PlayState> emit) async {
+    if (state is PlayingState) {
+      try {
+        await audioPlayer.setPlaybackRate(event.rate);
+        final estadoActual = state as PlayingState;
+        emit(estadoActual.copyWith(playbackRate: event.rate));
+      } catch (e) {
+        emit(ErrorState("Error: no se pudo cambiar la velocidad"));
+        debugPrint(e.toString());
+      }
     }
   }
 
@@ -83,6 +115,8 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayState> {
           duration: duration,
           position: position,
           playing: true,
+          volume: state is PlayingState ? (state as PlayingState).volume : 1.0,
+          playbackRate: state is PlayingState ? (state as PlayingState).playbackRate : 1.0,
         ),
       );
     } catch (e) {
@@ -114,6 +148,8 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayState> {
           duration: estadoActual.duration,
           position: estadoActual.position,
           playing: false,
+          volume: estadoActual.volume,
+          playbackRate: estadoActual.playbackRate,
         ));
       } catch(e) {
         emit(ErrorState("Error: no se pudo pausar el archivo"));
@@ -160,6 +196,8 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayState> {
           duration: estadoActual.duration,
           position: event.position,
           playing: estadoActual.playing,
+          volume: estadoActual.volume,
+          playbackRate: estadoActual.playbackRate,
         ));
       } catch(e) {
         emit(ErrorState("Error: no se pudo buscar la posición"));
@@ -195,6 +233,8 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayState> {
             duration: estadoActual.duration,
             position: estadoActual.position,
             playing: true,
+            volume: estadoActual.volume,
+            playbackRate: estadoActual.playbackRate,
           ));
         } else if (playerState == PlayerState.paused && estadoActual.playing) {
           emit(PlayingState(
@@ -202,6 +242,8 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayState> {
             duration: estadoActual.duration,
             position: estadoActual.position,
             playing: false,
+            volume: estadoActual.volume,
+            playbackRate: estadoActual.playbackRate,
           ));
         } else if (playerState == PlayerState.completed) {
           // Cuando termina la canción, pasar a la siguiente
