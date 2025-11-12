@@ -263,4 +263,4 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayState> {
     audioPlayer.dispose();
     return super.close();
   }
-} // end class
+}

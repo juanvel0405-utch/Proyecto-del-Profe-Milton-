@@ -102,14 +102,6 @@ class _PlayerState extends State<Player> {
             appBar: AppBar(
               toolbarHeight: 56,
               backgroundColor: const Color(0xff3966da),
-              title: const Text(
-                'Reproductor',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               leading: IconButton(
                 icon: const Icon(Icons.menu),
                 onPressed: () {
@@ -165,4 +157,4 @@ class _PlayerState extends State<Player> {
     bloc.close();
     super.dispose();
   }
-} // end class
+} 

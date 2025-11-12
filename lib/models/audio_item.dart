@@ -1,5 +1,4 @@
 
-//PODO
 class AudioItem{
   final String assetPath, title,artist,imagePath;
 
