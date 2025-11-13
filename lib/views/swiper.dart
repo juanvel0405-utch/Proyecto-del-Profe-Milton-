@@ -7,6 +7,28 @@ import '../blocs/player_state.dart';
 import '../blocs/playerbloc.dart';
 import '../models/audio_item.dart';
 
+class SensitivePageScrollPhysics extends PageScrollPhysics {
+  const SensitivePageScrollPhysics({ScrollPhysics? parent}) : super(parent: parent);
+
+  @override
+  SensitivePageScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return SensitivePageScrollPhysics(parent: buildParent(ancestor));
+  }
+
+  @override
+  double get minFlingVelocity => 50.0;
+
+  @override
+  double get maxFlingVelocity => 8000.0;
+
+  @override
+  SpringDescription get spring => const SpringDescription(
+    mass: 0.5,
+    stiffness: 200.0,
+    damping: 0.8,
+  );
+}
+
 class Swiper extends StatelessWidget {
   final PageController pageController;
   final List<AudioItem> audioList;
@@ -33,14 +55,16 @@ class Swiper extends StatelessWidget {
               child: PageView.builder(
                 controller: pageController,
                 itemCount: audioList.length,
+                physics: const SensitivePageScrollPhysics(),
+                pageSnapping: true,
                 onPageChanged: (indice) {
                   final actual = bloc.state;
-                  if (actual is PlayingState && indice != actual.position) {
+                  if (actual is PlayingState && indice != actual.currentIndex) {
                     bloc.add(PlayerLoadEvent(indice));
                   }
                 },
                 itemBuilder: (contex, index) => AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
+                  duration: Duration(milliseconds: 50),
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(50),
@@ -92,15 +116,15 @@ class Swiper extends StatelessWidget {
         Text(
           audioItem.title,
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 4),
         Text(
           audioItem.artist,
-          style: TextStyle(fontSize: 18, color: Colors.white70),
+          style: TextStyle(fontSize: 15, color: Colors.white70),
         ),
       ],
     );

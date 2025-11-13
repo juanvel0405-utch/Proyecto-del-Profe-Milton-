@@ -112,23 +112,22 @@ class _PlayerState extends State<Player> {
       child: BlocListener<PlayerBloc, PlayState>(
         listener: (context, state) {
           if (state is PlayingState) {
-            final currentPageIndex = pageController?.page?.round() ?? -1;
-            
-            if (state.currentIndex != _lastIndex || currentPageIndex != state.currentIndex) {
+            if (state.currentIndex != _lastIndex) {
               _lastIndex = state.currentIndex;
               
               if (pageController != null && pageController!.hasClients) {
-                final difference = (state.currentIndex - currentPageIndex).abs();
-                
-                if (difference > 1 || currentPageIndex == -1) {
-                  pageController!.jumpToPage(state.currentIndex);
-                } else {
-                  pageController!.animateToPage(
-                    state.currentIndex,
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                }
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (pageController != null && pageController!.hasClients) {
+                    final currentPage = pageController!.page?.round() ?? 0;
+                    if (currentPage != state.currentIndex) {
+                      pageController!.animateToPage(
+                        state.currentIndex,
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  }
+                });
               }
             }
           }
