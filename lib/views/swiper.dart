@@ -7,28 +7,6 @@ import '../blocs/player_state.dart';
 import '../blocs/playerbloc.dart';
 import '../models/audio_item.dart';
 
-class SensitivePageScrollPhysics extends PageScrollPhysics {
-  const SensitivePageScrollPhysics({ScrollPhysics? parent}) : super(parent: parent);
-
-  @override
-  SensitivePageScrollPhysics applyTo(ScrollPhysics? ancestor) {
-    return SensitivePageScrollPhysics(parent: buildParent(ancestor));
-  }
-
-  @override
-  double get minFlingVelocity => 50.0;
-
-  @override
-  double get maxFlingVelocity => 8000.0;
-
-  @override
-  SpringDescription get spring => const SpringDescription(
-    mass: 0.5,
-    stiffness: 200.0,
-    damping: 0.8,
-  );
-}
-
 class Swiper extends StatelessWidget {
   final PageController pageController;
   final List<AudioItem> audioList;
@@ -55,7 +33,7 @@ class Swiper extends StatelessWidget {
               child: PageView.builder(
                 controller: pageController,
                 itemCount: audioList.length,
-                physics: const SensitivePageScrollPhysics(),
+                physics: const PageScrollPhysics(),
                 pageSnapping: true,
                 onPageChanged: (indice) {
                   final actual = bloc.state;
@@ -64,7 +42,7 @@ class Swiper extends StatelessWidget {
                   }
                 },
                 itemBuilder: (contex, index) => AnimatedContainer(
-                  duration: Duration(milliseconds: 50),
+                  duration: Duration(milliseconds: 200),
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(50),

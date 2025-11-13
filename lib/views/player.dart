@@ -112,7 +112,9 @@ class _PlayerState extends State<Player> {
       child: BlocListener<PlayerBloc, PlayState>(
         listener: (context, state) {
           if (state is PlayingState) {
-            if (state.currentIndex != _lastIndex) {
+            final currentPageIndex = pageController?.page?.round() ?? -1;
+
+            if (state.currentIndex != _lastIndex || currentPageIndex != state.currentIndex) {
               _lastIndex = state.currentIndex;
               
               if (pageController != null && pageController!.hasClients) {
